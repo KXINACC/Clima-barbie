@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clima Barbie</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .intro {
+            background-color: #ffe4e1;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #FF69B4;
+        }
+
+        .intro img {
+            max-width: 300px;
+            margin-bottom: 20px;
+        }
+
+        .intro h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .intro p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .intro button {
+            background-color: #FF69B4;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1em;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .intro button:hover {
+            background-color: #e75480;
+        }
+
+        .content {
+            display: none;
+            background-color: #ffe4e1;
+        }
+
+        header {
+            background-color: #FF69B4;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        header img {
+            max-width: 150px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin: 10px 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            width: 250px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .card h2 {
+            color: #FF69B4;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            background-color: #FF69B4;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela inicial interativa -->
+    <div class="intro">
+        <img src="https://i.pinimg.com/originals/da/7b/2b/da7b2b030d0e833c7790f0986789a2c4.png" alt="Barbie Logo">
+        <h1>🌸 Olá! Sou a Barbiegrel!</h1>
+        <p>Quer que eu te mostre a porra do clima? clica nssse caralho!</p>
+        <button onclick="mostrarClima()">Ver o tempinho</button>
+    </div>
+
+    <!-- Conteúdo do clima -->
+    <div class="content">
+        <header>
+            <img src="https://i.pinimg.com/originals/da/7b/2b/da7b2b030d0e833c7790f0986789a2c4.png" alt="Barbie Logo">
+            <h1>🌸 Olha o clima, otarios</h1>
+        </header>
+        <div class="container">
+            <div class="card">
+                <img src="https://www.barbie.com.br/wp-content/uploads/sites/4/2021/09/barbie-moda-1024x576.jpg" alt="Natal Barbie">
+                <h2>Natal</h2>
+                <p>Temperatura: <span id="temperatura-natal">--°C</span></p>
+                <p>Condição: <span id="condicao-natal">--</span></p>
+            </div>
+            <div class="card">
+                <img src="https://www.barbie.com.br/wp-content/uploads/sites/4/2021/08/barbie-2-1024x576.jpg" alt="Assú Barbie">
+                <h2>Assú</h2>
+                <p>Temperatura: <span id="temperatura-assu">--°C</span></p>
+                <p>Condição: <span id="condicao-assu">--</span></p>
+            </div>
+            <div class="card">
+                <img src="https://www.barbie.com.br/wp-content/uploads/sites/4/2021/08/barbie-1024x576.jpg" alt="Caicó Barbie">
+                <h2>Caicó</h2>
+                <p>Temperatura: <span id="temperatura-caico">--°C</span></p>
+                <p>Condição: <span id="condicao-caico">--</span></p>
+            </div>
+        </div>
+        <footer>
+            <p>Desenvolvido pelo garoto de programa caio cachina!</p>
+        </footer>
+    </div>
+
+    <script>
+        function mostrarClima() {
+            document.querySelector('.intro').style.display = 'none';
+            document.querySelector('.content').style.display = 'block';
+
+            buscarClima('Natal', 'temperatura-natal', 'condicao-natal');
+            buscarClima('Assu', 'temperatura-assu', 'condicao-assu');
+            buscarClima('Caico', 'temperatura-caico', 'condicao-caico');
+        }
+
+        const apiKey = '38c5d58ec5e6455ea88173258240512';
+
+        function buscarClima(cidade, tempId, condId) {
+            const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${cidade}&lang=pt`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById(tempId).textContent = `${data.current.temp_c}°C`;
+                    document.getElementById(condId).textContent = data.current.condition.text;
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar os dados:', error);
+                });
+        }
+    </script>
+</body>
+</html>
